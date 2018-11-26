@@ -20,12 +20,14 @@ fips_begin_lib(imgui)
         imgui.h
         imgui_demo.cpp
         imgui_draw.cpp
+		imgui_widgets.cpp
         imgui_internal.h
-        stb_rect_pack.h
-        stb_textedit.h
-        stb_truetype.h
+        imstb_rectpack.h
+        imstb_textedit.h
+        imstb_truetype.h
     )
 fips_end_lib()
+target_compile_definitions(imgui PUBLIC IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
 
 if (NOT FIPS_IMPORT)
     if (FIPS_MACOS OR FIPS_LINUX OR FIPS_WINDOWS)
