@@ -1,18 +1,20 @@
 #
 # project: fips-imgui
 #
+    cmake_minimum_required(VERSION 3.21)
 
 if (NOT FIPS_IMPORT)
-    cmake_minimum_required(VERSION 3.12)
     get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
     include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+    project(fips-imgui)
     fips_setup()
-    fips_project(fips-imgui)
 endif()
 
 fips_begin_lib(imgui)
-    fips_vs_disable_warnings(4312)   # 'type cast': conversion from 'int' to 'void *' of greater size
-    include_directories(imgui)
+    if(FIPS_WINDOWS)
+        set_target_properties(imgui PROPERTIES COMPILE_FLAGS /wd4312)
+    endif()
+    target_include_directories(imgui PUBLIC imgui)
     fips_dir(imgui)
     fips_files(
         imconfig.h
@@ -108,8 +110,3 @@ if (FIPS_CLANG)
 elseif(FIPS_GCC)
     set_target_properties(imgui PROPERTIES COMPILE_FLAGS "-Wno-unused-but-set-variable -Wno-type-limits -Wno-missing-field-initializers")
 endif()
-
-if (NOT FIPS_IMPORT)
-    fips_finish()
-endif()
-
